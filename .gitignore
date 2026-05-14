@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual environments
+venv/
+.env/
+
+# Electron / Node
+node_modules/
+dist/
+build/
+
+# AI model caches
+.model_cache/
+model_cache/
+*.bin
+*.safetensors
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# Temporary
+temp/
+tmp/
+
+# Cache
+.cache/
+
+# SQLite
+*.sqlite
+*.db
+
+# History/session files
+neo-history.json
+neo-settings.json
+neo-bookmarks.json
+neo-sidebar.json
