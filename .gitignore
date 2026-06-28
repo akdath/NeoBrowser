@@ -1,0 +1,106 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+.env/
+
+# ── Environment / secrets — NEVER commit these ────────────────────────────────
+.env
+.env.*
+*.env
+secrets.json
+*apikey*
+*api_key*
+*secret*
+
+# ── Electron / Node ───────────────────────────────────────────────────────────
+node_modules/
+dist/
+build/
+out/
+.webpack/
+
+# ── AI model cache — models are large binaries, not source code ───────────────
+ai_chat/.model_cache/
+.model_cache/
+model_cache/
+*.bin
+*.safetensors
+*.ot
+*.onnx
+*.pt
+*.pth
+
+# ── Tor — sensitive runtime data, keys, and state ─────────────────────────────
+# Tor data directory contains private keys and circuit state — never commit
+tor/data/
+# Tor binary is platform-specific — users install their own
+tor/tor.exe
+tor/tor
+tor/tor-gencert.exe
+tor/tor-gencert
+# Pluggable transport binaries are platform-specific
+tor/pluggable_transports/*.exe
+tor/pluggable_transports/lyrebird
+tor/pluggable_transports/conjure-client
+tor/pluggable_transports/obfs4proxy
+# Tor hidden service keys (if ever used) — EXTREMELY sensitive
+tor/hidden_service/
+tor/onion_service/
+# torrc overrides with local paths
+tor/torrc.local
+
+# ── User data — contains browsing history, cookies, saved settings ────────────
+neo-history.json
+neo-settings.json
+neo-bookmarks.json
+neo-sidebar.json
+neo-apikey.json
+*.sqlite
+*.db
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+electron-debug.log*
+
+# ── OS files ──────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ── Editor ────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Temp / build artifacts ────────────────────────────────────────────────────
+temp/
+tmp/
+.cache/
+.tmp/
+*.bak
+*.orig
+
+# ── Python packaging ──────────────────────────────────────────────────────────
+*.egg-info/
+dist/
+*.egg
+MANIFEST

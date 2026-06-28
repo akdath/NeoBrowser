@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Neo Browser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ══ TITLE BAR ══════════════════════════════════════════════════════════════ -->
+<div id="titlebar">
+  <div id="titlebar-logo">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="var(--ac)" stroke-width="1.8"/>
+      <path d="M12 2C12 2 8 7 8 12C8 17 12 22 12 22"  stroke="var(--ac)" stroke-width="1.8"/>
+      <path d="M12 2C12 2 16 7 16 12C16 17 12 22 12 22" stroke="var(--ac)" stroke-width="1.8"/>
+      <path d="M2 12H22" stroke="var(--ac)" stroke-width="1.8"/>
+    </svg>
+    <span>Neo</span>
+  </div>
+
+  <button id="new-tab-btn" title="New Tab (Ctrl+T)">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M6 1V11M1 6H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <div id="tab-bar-wrapper">
+    <div id="tab-bar"></div>
+  </div>
+
+  <div id="titlebar-drag-region"></div>
+
+  <div id="titlebar-controls">
+    <button id="btn-minimize" title="Minimize">
+      <svg width="10" height="1" viewBox="0 0 10 1"><line x1="0" y1=".5" x2="10" y2=".5" stroke="currentColor" stroke-width="1.5"/></svg>
+    </button>
+    <button id="btn-maximize" title="Maximize">
+      <svg width="10" height="10" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+    </button>
+    <button id="btn-close" title="Close">
+      <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ══ NAVBAR ═════════════════════════════════════════════════════════════════ -->
+<div id="navbar">
+  <div id="nav-left">
+    <button class="nav-btn" id="btn-back"    title="Back (Alt+Left)"    disabled>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="nav-btn" id="btn-forward" title="Forward (Alt+Right)" disabled>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="nav-btn" id="btn-reload" title="Reload (Ctrl+R)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="overflow:visible;display:block">
+        <path d="M13 3A6 6 0 1 0 13.5 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        <path d="M13 1V4H10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="url-bar-wrapper">
+    <div id="security-icon" class="neutral" title="Connection security">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1L2 3V6.5C2 8.7 3.8 10.6 6 11C8.2 10.6 10 8.7 10 6.5V3L6 1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M4 5.8L5.3 7.2L8 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <input id="url-bar" type="text" placeholder="Search or enter URL…" autocomplete="off" spellcheck="false"/>
+    <button id="btn-bookmark-page" title="Bookmark this page (Ctrl+D)">
+      <svg id="bookmark-icon" width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M2 1.5H11V12L6.5 9L2 12V1.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="nav-right">
+    <button class="nav-btn icon-btn" id="btn-ai" title="Neo AI">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <circle cx="6.5" cy="6.5" r="5.2" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="6.5" cy="6.5" r="2"   fill="currentColor" opacity="0.3"/>
+        <path d="M6.5 1.3V2.5M6.5 10.5V11.7M1.3 6.5H2.5M10.5 6.5H11.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <span>AI</span>
+    </button>
+    <button class="nav-btn icon-btn" id="btn-bookmarks" title="Bookmarks">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M3 1.5H10V12L6.5 9.5L3 12V1.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="nav-btn icon-btn" id="btn-history" title="History">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M6.5 3.5V7L9 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="nav-btn" id="btn-sidebar-toggle" title="Toggle Sidebar">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <rect x="1" y="1.5" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M4.5 1.5V11.5" stroke="currentColor" stroke-width="1.3"/>
+      </svg>
+    </button>
+
+    <div id="more-menu-wrap">
+      <button class="nav-btn" id="btn-more" title="More tools">
+        <svg width="14" height="4" viewBox="0 0 14 4" fill="none">
+          <circle cx="2"  cy="2" r="1.5" fill="currentColor"/>
+          <circle cx="7"  cy="2" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="2" r="1.5" fill="currentColor"/>
+        </svg>
+      </button>
+
+      <div id="more-menu" class="more-menu hidden">
+
+        <!-- New tab / window options -->
+        <button class="more-menu-item" id="btn-new-tab">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="1.5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 4V9M4 6.5H9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          New tab
+          <span class="more-menu-shortcut">Ctrl+T</span>
+        </button>
+        <button class="more-menu-item" id="btn-new-incognito">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="5" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M2 11c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          New incognito tab
+          <span class="more-menu-shortcut">Ctrl+Shift+N</span>
+        </button>
+        <button class="more-menu-item" id="btn-new-tor">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.3"/><circle cx="6.5" cy="6.5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 1.5V4M6.5 9V11.5M1.5 6.5H4M9 6.5H11.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          New incognito tab with Tor
+          <span class="more-menu-shortcut">Ctrl+Shift+T</span>
+        </button>
+        <div class="more-menu-divider"></div>
+        <div class="more-menu-item more-zoom-row" id="more-zoom-row">
+          <span class="more-menu-label">Zoom</span>
+          <div class="more-zoom-controls">
+            <button class="zoom-btn" id="zoom-out-btn" title="Zoom Out (Ctrl+-)">−</button>
+            <span id="zoom-level">100%</span>
+            <button class="zoom-btn" id="zoom-in-btn"  title="Zoom In (Ctrl+=)">+</button>
+            <button class="zoom-btn" id="zoom-reset-btn" title="Reset Zoom (Ctrl+0)" style="font-size:9px;padding:0 4px;">↺</button>
+          </div>
+        </div>
+        <div class="more-menu-divider"></div>
+        <button class="more-menu-item" id="btn-find">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M9 9L12 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Find in page
+          <span class="more-menu-shortcut">Ctrl+F</span>
+        </button>
+        <button class="more-menu-item" id="btn-print">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="4" width="9" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M4 4V2H9V4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M4 8H9M4 10H7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Print
+          <span class="more-menu-shortcut">Ctrl+P</span>
+        </button>
+        <button class="more-menu-item" id="btn-save-page">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 2V8M4 6L6.5 9L9 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Save page
+        </button>
+        <button class="more-menu-item" id="btn-downloads">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5V7.5M4 5.5L6.5 8L8.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10.5H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Downloads
+        </button>
+        <div class="more-menu-divider"></div>
+        <button class="more-menu-item" id="btn-more-settings">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="1.8" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 1V2.2M6.5 10.8V12M1 6.5H2.2M10.8 6.5H12M2.3 2.3L3.1 3.1M9.9 9.9L10.7 10.7M10.7 2.3L9.9 3.1M3.1 9.9L2.3 10.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Settings
+          <span class="more-menu-shortcut">Ctrl+,</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FIND BAR ═══════════════════════════════════════════════════════════════ -->
+<div id="find-bar" class="find-hidden">
+  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="color:var(--tx3);flex-shrink:0">
+    <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.4"/>
+    <path d="M9 9L12 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </svg>
+  <input id="find-input" type="text" placeholder="Find in page…" autocomplete="off"/>
+  <span id="find-count"></span>
+  <button id="find-prev" title="Previous">↑</button>
+  <button id="find-next" title="Next">↓</button>
+  <button id="find-close" title="Close">✕</button>
+</div>
+
+<!-- ══ BROWSER BODY ════════════════════════════════════════════════════════════ -->
+<div id="browser-body">
+
+  <!-- ── SIDEBAR ──────────────────────────────────────────────────────────────── -->
+  <div id="sidebar">
+    <div id="sidebar-inner">
+      <div class="sidebar-section">
+        <div class="sidebar-section-header">
+          <span>Sites</span>
+          <button id="sidebar-add-site" title="Add site">
+            <svg width="10" height="10" viewBox="0 0 10 10"><path d="M5 1V9M1 5H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div id="sidebar-sites-list"></div>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-header"><span>Tabs</span></div>
+        <div id="sidebar-tabs-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WEBVIEW AREA ──────────────────────────────────────────────────────────── -->
+  <div id="webview-container">
+    <div id="newtab-page">
+      <div id="newtab-inner">
+        <div id="newtab-header">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="var(--ac)" stroke-width="1.2"/>
+            <path d="M12 2C12 2 8 7 8 12C8 17 12 22 12 22"  stroke="var(--ac)" stroke-width="1.2"/>
+            <path d="M12 2C12 2 16 7 16 12C16 17 12 22 12 22" stroke="var(--ac)" stroke-width="1.2"/>
+            <path d="M2 12H22" stroke="var(--ac)" stroke-width="1.2"/>
+          </svg>
+          <h1>Neo Browser</h1>
+          <p class="newtab-tagline">Fast · Private · AI-Powered</p>
+        </div>
+        <div id="newtab-searchbar">
+          <div id="newtab-search-wrap">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0;color:var(--tx3)">
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M10 10L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <input id="newtab-search-input" type="text" placeholder="Search or enter a URL…" autocomplete="off"/>
+          </div>
+        </div>
+        <div id="shortcuts-grid"></div>
+        <button id="add-shortcut-btn">
+          <svg width="11" height="11" viewBox="0 0 11 11"><path d="M5.5 1V10M1 5.5H10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Add shortcut
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ INCOGNITO NEW TAB PAGE ══════════════════════════════════════════════ -->
+    <div id="incognito-page">
+      <div class="private-inner">
+        <div class="private-icon">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h1 class="private-title">You've gone incognito</h1>
+        <p class="private-subtitle">Neo won't save your browsing history, cookies, or site data for this session.</p>
+      </div>
+    </div>
+
+    <!-- ══ TOR NEW TAB PAGE ════════════════════════════════════════════════════ -->
+    <div id="tor-page">
+      <div class="private-inner">
+        <div class="private-icon" style="font-size:52px;line-height:1;">🧅</div>
+        <h1 class="private-title">You're browsing with Tor</h1>
+        <p class="private-subtitle">Your traffic is routed through the Tor network. Your IP address is hidden from websites.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ NEO AI CHAT PANEL ══════════════════════════════════════════════════════ -->
+<div id="ai-panel" class="panel-hidden">
+  <div class="panel-header" id="ai-panel-header">
+    <div class="panel-title">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <circle cx="6.5" cy="6.5" r="5.2" stroke="var(--ac)" stroke-width="1.4"/>
+        <circle cx="6.5" cy="6.5" r="2"   fill="var(--ac)" opacity="0.4"/>
+        <path d="M6.5 1.3V2.5M6.5 10.5V11.7M1.3 6.5H2.5M10.5 6.5H11.7" stroke="var(--ac)" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      Neo AI
+      <span id="ai-local-badge">LOCAL</span>
+    </div>
+    <div style="display:flex;gap:3px;align-items:center">
+      <button id="ai-clear-chat" title="Clear conversation">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M9.5 2A4.5 4.5 0 1 0 10 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M9.5 0.5V3H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button id="ai-close">
+        <svg width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 1.5L9.5 9.5M9.5 1.5L1.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="ai-quick-row">
+    <button class="ai-pill" data-action="summarize">⬡ Summarize</button>
+    <button class="ai-pill" data-action="keypoints">◇ Key Points</button>
+    <button class="ai-pill" data-action="explain">◎ Explain</button>
+  </div>
+  <div id="ai-ctx-bar">
+    <span id="ai-ctx-label">⬡ Page context loaded</span>
+    <button id="ai-ctx-clear" title="Remove context">✕</button>
+  </div>
+  <div id="ai-messages">
+    <div id="ai-welcome">
+      <div id="ai-welcome-orb">✦</div>
+      <div id="ai-welcome-title">Hi, I'm Neo AI</div>
+      <div id="ai-welcome-sub">Ask me anything, or use the buttons above to analyze this page. Fully local — no data leaves your device.</div>
+    </div>
+  </div>
+  <div id="ai-input-area">
+    <div id="ai-input-wrap">
+      <textarea id="ai-chat-input" placeholder="Ask Neo anything…" rows="1" spellcheck="false"></textarea>
+      <button id="ai-send-btn" title="Send">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M1 6H11M7 2L11 6L7 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <div id="ai-status-bar">
+      <span id="ai-status-dot"></span>
+      <span id="ai-status-text">Neo AI · Local model</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOOKMARKS PANEL ════════════════════════════════════════════════════════ -->
+<div id="bookmarks-panel" class="panel-hidden side-panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 1H10V11L6 8.5L2 11V1Z" stroke="var(--ac)" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      Bookmarks
+    </div>
+    <button class="panel-close-btn" data-panel="bookmarks-panel"><svg width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 1.5L9.5 9.5M9.5 1.5L1.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+  </div>
+  <div id="bookmarks-list" class="scroll-area"></div>
+  <div class="panel-footer"><button id="clear-bookmarks-btn" class="danger-btn">Clear All</button></div>
+</div>
+
+<!-- ══ HISTORY PANEL ══════════════════════════════════════════════════════════ -->
+<div id="history-panel" class="panel-hidden side-panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--ac)" stroke-width="1.3"/><path d="M6 3.5V6.5L8 8" stroke="var(--ac)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      History
+    </div>
+    <button class="panel-close-btn" data-panel="history-panel"><svg width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 1.5L9.5 9.5M9.5 1.5L1.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+  </div>
+  <div id="history-search-wrap">
+    <input id="history-search" type="text" placeholder="Search history…"/>
+  </div>
+  <div id="history-list" class="scroll-area"></div>
+  <div class="panel-footer"><button id="clear-history-btn" class="danger-btn">Clear All History</button></div>
+</div>
+
+<!-- ══ DOWNLOADS PANEL ════════════════════════════════════════════════════════ -->
+<div id="downloads-panel" class="panel-hidden side-panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M6 1.5V7.5M3.5 5.5L6 8L8.5 5.5" stroke="var(--ac)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 10H10" stroke="var(--ac)" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+      Downloads
+    </div>
+    <button class="panel-close-btn" data-panel="downloads-panel"><svg width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 1.5L9.5 9.5M9.5 1.5L1.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+  </div>
+  <div id="downloads-list" class="scroll-area">
+    <div class="empty-state">No downloads yet.</div>
+  </div>
+</div>
+
+<!-- ══ COOKIES PANEL ══════════════════════════════════════════════════════════ -->
+<div id="cookies-panel" class="panel-hidden side-panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="var(--ac)" stroke-width="1.3"/><circle cx="4.5" cy="4.5" r="0.7" fill="var(--ac)"/><circle cx="7.5" cy="5.5" r="0.7" fill="var(--ac)"/><circle cx="5" cy="8" r="0.7" fill="var(--ac)"/></svg>
+      Cookies
+    </div>
+    <button class="panel-close-btn" data-panel="cookies-panel"><svg width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 1.5L9.5 9.5M9.5 1.5L1.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+  </div>
+  <div id="cookies-filter-wrap">
+    <input id="cookies-filter" type="text" placeholder="Filter by name or domain…"/>
+    <button id="refresh-cookies-btn">Refresh</button>
+  </div>
+  <div id="cookies-list" class="scroll-area"></div>
+  <div class="panel-footer"><button id="clear-cookies-btn" class="danger-btn">Clear All Cookies</button></div>
+</div>
+
+<!-- ══ SETTINGS PANEL ════════════════════════════════════════════════════════ -->
+<div id="settings-panel" class="panel-hidden side-panel wide-panel">
+  <div class="panel-header">
+    <div class="panel-title">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="1.8" stroke="currentColor" stroke-width="1.3"/><path d="M6 1V2.2M6 9.8V11M1 6H2.2M9.8 6H11M2.3 2.3L3.1 3.1M8.9 8.9L9.7 9.7M9.7 2.3L8.9 3.1M3.1 8.9L2.3 9.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Settings
+    </div>
+    <button class="panel-close-btn" data-panel="settings-panel"><svg width="11" height="11" viewBox="0 0 11 11"><path d="M1.5 1.5L9.5 9.5M9.5 1.5L1.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+  </div>
+  <div id="settings-body" class="scroll-area">
+
+    <!-- APPEARANCE -->
+    <div class="sg">
+      <div class="sg-title">Appearance</div>
+
+      <!-- Preset Themes -->
+      <div class="si">
+        <div class="si-info">
+          <div class="si-label">Theme</div>
+          <div class="si-desc">Choose a preset interface theme</div>
+        </div>
+        <div class="theme-grid">
+          <button class="theme-opt active" data-value="dark"     title="Dark">Dark</button>
+          <button class="theme-opt"        data-value="light"    title="Light">Light</button>
+          <button class="theme-opt"        data-value="midnight" title="Midnight Blue">Midnight</button>
+          <button class="theme-opt"        data-value="forest"   title="Forest Green">Forest</button>
+          <button class="theme-opt"        data-value="sunset"   title="Sunset Orange">Sunset</button>
+          <button class="theme-opt"        data-value="ocean"    title="Ocean">Ocean</button>
+          <button class="theme-opt"        data-value="rose"     title="Rose">Rose</button>
+          <button class="theme-opt"        data-value="nord"     title="Nord">Nord</button>
+          <button class="theme-opt"        data-value="custom"   title="Custom Colors" id="theme-custom-opt">🎨 Custom</button>
+        </div>
+      </div>
+
+      <!-- Custom Color Picker (Opera-style) -->
+      <div class="si si-custom-colors" id="custom-color-section">
+        <div class="si-info" style="width:100%">
+          <div class="si-label" style="margin-bottom:10px">Custom Colors</div>
+          <div class="si-desc" style="margin-bottom:14px">Set three colors to build your own theme. Changes apply instantly.</div>
+          <div class="custom-color-grid">
+
+            <div class="color-picker-item">
+              <div class="cpi-preview" id="cpi-preview-accent"></div>
+              <div class="cpi-info">
+                <div class="cpi-label">Accent</div>
+                <div class="cpi-desc">Buttons, links, active states</div>
+              </div>
+              <div class="cpi-controls">
+                <input type="color" id="custom-accent" class="color-input" value="#7c6af7" title="Choose accent color"/>
+                <span class="cpi-hex" id="cpi-hex-accent">#7c6af7</span>
+              </div>
+            </div>
+
+            <div class="color-picker-item">
+              <div class="cpi-preview" id="cpi-preview-bg"></div>
+              <div class="cpi-info">
+                <div class="cpi-label">Background</div>
+                <div class="cpi-desc">Main surface color</div>
+              </div>
+              <div class="cpi-controls">
+                <input type="color" id="custom-bg" class="color-input" value="#0e0e14" title="Choose background color"/>
+                <span class="cpi-hex" id="cpi-hex-bg">#0e0e14</span>
+              </div>
+            </div>
+
+            <div class="color-picker-item">
+              <div class="cpi-preview" id="cpi-preview-text"></div>
+              <div class="cpi-info">
+                <div class="cpi-label">Text</div>
+                <div class="cpi-desc">Primary text color</div>
+              </div>
+              <div class="cpi-controls">
+                <input type="color" id="custom-text" class="color-input" value="#f0f0ff" title="Choose text color"/>
+                <span class="cpi-hex" id="cpi-hex-text">#f0f0ff</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Live preview swatch -->
+          <div class="custom-preview-bar" id="custom-preview-bar">
+            <div class="cpb-swatch" id="cpb-swatch-bg">
+              <span class="cpb-label">BG</span>
+            </div>
+            <div class="cpb-swatch" id="cpb-swatch-surface">
+              <span class="cpb-label">Surface</span>
+            </div>
+            <div class="cpb-swatch cpb-accent" id="cpb-swatch-accent">
+              <span class="cpb-label">Accent</span>
+            </div>
+            <div class="cpb-swatch" id="cpb-swatch-text">
+              <span class="cpb-label" id="cpb-text-sample">Aa text</span>
+            </div>
+          </div>
+
+          <div class="custom-color-actions">
+            <button class="action-btn" id="reset-custom-colors">Reset to Default</button>
+            <button class="action-btn accent-btn" id="apply-custom-colors">Apply Theme</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="si">
+        <div class="si-info"><div class="si-label">Sidebar</div><div class="si-desc">Quick-access sidebar panel</div></div>
+        <label class="switch"><input type="checkbox" id="set-sidebar" checked/><span class="slider"></span></label>
+      </div>
+      <div class="si">
+        <div class="si-info">
+          <div class="si-label">Pin tools to toolbar</div>
+          <div class="si-desc">Show zoom &amp; find in the toolbar (otherwise in ⋯ menu)</div>
+        </div>
+        <label class="switch"><input type="checkbox" id="set-pin-tools"/><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <!-- AI FEATURES -->
+    <div class="sg">
+      <div class="sg-title">AI Features</div>
+      <div class="si">
+        <div class="si-info"><div class="si-label">Enable AI</div><div class="si-desc">Local chat &amp; classification</div></div>
+        <label class="switch"><input type="checkbox" id="set-ai" checked/><span class="slider"></span></label>
+      </div>
+      <div class="si">
+        <div class="si-info"><div class="si-label">Phishing Detection</div><div class="si-desc">URL-based threat analysis before navigation</div></div>
+        <label class="switch"><input type="checkbox" id="set-phishing" checked/><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <!-- DATA & PRIVACY -->
+    <div class="sg">
+      <div class="sg-title">Data &amp; Privacy</div>
+      <div class="si">
+        <div class="si-info"><div class="si-label">History</div><div class="si-desc">View and delete browsing history</div></div>
+        <button class="action-btn" id="open-history-from-settings">Manage</button>
+      </div>
+      <div class="si">
+        <div class="si-info"><div class="si-label">Cookies</div><div class="si-desc">View and delete stored cookies</div></div>
+        <button class="action-btn" id="open-cookies-from-settings">Manage</button>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="sg">
+      <div class="sg-title">About</div>
+      <div class="about-card">
+        <div class="about-name">Neo Browser v2</div>
+        <div class="about-ver">Open Source · MIT License</div>
+        <div class="about-desc">100% local AI · No API keys · No tracking</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODALS ══════════════════════════════════════════════════════════════════ -->
+<div id="overlay" class="hidden"></div>
+
+<div id="add-shortcut-modal" class="modal hidden">
+  <div class="modal-header"><span>Add Shortcut</span><button class="modal-close" data-modal="add-shortcut-modal">✕</button></div>
+  <div class="modal-body">
+    <label>Title<input id="sc-title" type="text" placeholder="e.g. My Site"/></label>
+    <label>URL<input id="sc-url" type="text" placeholder="https://example.com"/></label>
+    <label>Icon (1-3 chars)<input id="sc-icon" type="text" placeholder="M" maxlength="3"/></label>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-cancel" data-modal="add-shortcut-modal">Cancel</button>
+    <button id="sc-save-btn" class="modal-ok">Add</button>
+  </div>
+</div>
+
+<div id="add-sidebar-modal" class="modal hidden">
+  <div class="modal-header"><span>Add to Sidebar</span><button class="modal-close" data-modal="add-sidebar-modal">✕</button></div>
+  <div class="modal-body">
+    <label>Title<input id="sb-title" type="text" placeholder="e.g. Twitter"/></label>
+    <label>URL<input id="sb-url" type="text" placeholder="https://twitter.com"/></label>
+    <label>Icon (1-3 chars)<input id="sb-icon" type="text" placeholder="T" maxlength="3"/></label>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-cancel" data-modal="add-sidebar-modal">Cancel</button>
+    <button id="sb-save-btn" class="modal-ok">Add</button>
+  </div>
+</div>
+
+<!-- ══ PHISHING WARNING POPUP ═════════════════════════════════════════════════ -->
+<div id="phishing-overlay" class="phishing-overlay hidden" role="alertdialog" aria-modal="true">
+  <div id="phishing-card">
+    <div id="phish-icon-wrap">
+      <svg id="phish-shield" width="56" height="56" viewBox="0 0 56 56" fill="none">
+        <path d="M28 4L8 13V28C8 39.05 16.95 49.37 28 52C39.05 49.37 48 39.05 48 28V13L28 4Z"
+              fill="rgba(224,79,79,0.12)" stroke="#e04f4f" stroke-width="2" stroke-linejoin="round"/>
+        <text x="28" y="35" text-anchor="middle" font-size="22" font-weight="700" fill="#e04f4f">!</text>
+      </svg>
+    </div>
+    <div id="phish-badge">PHISHING DETECTED</div>
+    <h2 id="phish-title">This website may be trying to steal your information</h2>
+    <p id="phish-url-line"><span id="phish-url-display"></span></p>
+    <div id="phish-reasons-box">
+      <div class="phish-reasons-label">Why Neo flagged this:</div>
+      <ul id="phish-reasons-list"></ul>
+    </div>
+    <div id="phish-score-row">
+      <span>Risk Score</span>
+      <div id="phish-score-bar-wrap"><div id="phish-score-bar"></div></div>
+      <span id="phish-score-num"></span>
+    </div>
+    <p id="phish-advice">Attackers on this site may try to steal your passwords, credit card numbers, or personal details. Neo Browser recommends you go back.</p>
+    <div id="phish-buttons">
+      <button id="phish-exit-btn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7H10M6 3L2 7L6 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Exit Website
+      </button>
+      <button id="phish-continue-btn">
+        Continue Anyway
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <p id="phish-footer-note">This check is done locally — no data is sent to any server.</p>
+  </div>
+</div>
+
+<!-- ══ STATUS BAR ═════════════════════════════════════════════════════════════ -->
+<div id="statusbar">
+  <span id="status-text"></span>
+  <span id="load-indicator" class="hidden"><span class="dot-wave"></span></span>
+</div>
+
+<style>
+/* ════════════════════════════════════════════════════════════════════════════
+   NEO BROWSER — COMPLETE THEME SYSTEM + CUSTOM COLOR PICKER
+════════════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --titlebar-h: 36px;
+  --navbar-h: 44px;
+  --statusbar-h: 22px;
+  --sidebar-w: 200px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --radius: 8px;
+  --radius-sm: 5px;
+}
+
+[data-theme="dark"] {
+  --bg:#0e0e14; --bg2:#14141c; --bg3:#1c1c28; --bg4:#242435; --bd:#2a2a40;
+  --tx:#f0f0ff; --tx2:#b0b0cc; --tx3:#6868a0;
+  --ac:#7c6af7; --ac2:#a78bfa; --ac-bg:rgba(124,106,247,.12); --ac-bd:rgba(124,106,247,.3);
+  --sec:#4ade80; --warn:#fb923c; --err:#f87171;
+  --shadow:0 4px 24px rgba(0,0,0,.5);
+}
+[data-theme="light"] {
+  --bg:#f8f8fc; --bg2:#ffffff; --bg3:#f0f0f8; --bg4:#e8e8f4; --bd:#d0d0e4;
+  --tx:#18182a; --tx2:#44446a; --tx3:#8888aa;
+  --ac:#6654e8; --ac2:#8b74f5; --ac-bg:rgba(102,84,232,.1); --ac-bd:rgba(102,84,232,.25);
+  --sec:#22c55e; --warn:#f97316; --err:#ef4444;
+  --shadow:0 4px 24px rgba(0,0,0,.1);
+}
+[data-theme="midnight"] {
+  --bg:#050814; --bg2:#0a0f1e; --bg3:#101828; --bg4:#182030; --bd:#1e2d44;
+  --tx:#e8f0ff; --tx2:#90a8d4; --tx3:#4a6490;
+  --ac:#3b82f6; --ac2:#60a5fa; --ac-bg:rgba(59,130,246,.12); --ac-bd:rgba(59,130,246,.3);
+  --sec:#34d399; --warn:#fbbf24; --err:#f87171;
+  --shadow:0 4px 24px rgba(0,0,0,.7);
+}
+[data-theme="forest"] {
+  --bg:#080f0a; --bg2:#0e1a10; --bg3:#152518; --bg4:#1d3320; --bd:#2a4a2e;
+  --tx:#e8f5e9; --tx2:#90b894; --tx3:#527855;
+  --ac:#4caf50; --ac2:#81c784; --ac-bg:rgba(76,175,80,.12); --ac-bd:rgba(76,175,80,.3);
+  --sec:#66bb6a; --warn:#ffa726; --err:#ef5350;
+  --shadow:0 4px 24px rgba(0,0,0,.6);
+}
+[data-theme="sunset"] {
+  --bg:#110808; --bg2:#1c0e0e; --bg3:#281414; --bg4:#361c1c; --bd:#4a2828;
+  --tx:#fff3f0; --tx2:#e0a898; --tx3:#9a6455;
+  --ac:#f97316; --ac2:#fb923c; --ac-bg:rgba(249,115,22,.12); --ac-bd:rgba(249,115,22,.3);
+  --sec:#4ade80; --warn:#fbbf24; --err:#f87171;
+  --shadow:0 4px 24px rgba(0,0,0,.6);
+}
+[data-theme="ocean"] {
+  --bg:#020c14; --bg2:#041424; --bg3:#062030; --bg4:#0a2d40; --bd:#0e3d54;
+  --tx:#e0f4ff; --tx2:#80c4e8; --tx3:#3a7898;
+  --ac:#06b6d4; --ac2:#22d3ee; --ac-bg:rgba(6,182,212,.12); --ac-bd:rgba(6,182,212,.3);
+  --sec:#34d399; --warn:#fbbf24; --err:#f87171;
+  --shadow:0 4px 24px rgba(0,0,0,.7);
+}
+[data-theme="rose"] {
+  --bg:#100810; --bg2:#180e18; --bg3:#241424; --bg4:#301c30; --bd:#3e2640;
+  --tx:#fff0f8; --tx2:#daa8cc; --tx3:#906080;
+  --ac:#ec4899; --ac2:#f472b6; --ac-bg:rgba(236,72,153,.12); --ac-bd:rgba(236,72,153,.3);
+  --sec:#a78bfa; --warn:#fbbf24; --err:#f87171;
+  --shadow:0 4px 24px rgba(0,0,0,.6);
+}
+[data-theme="nord"] {
+  --bg:#2e3440; --bg2:#3b4252; --bg3:#434c5e; --bg4:#4c566a; --bd:#5a667a;
+  --tx:#eceff4; --tx2:#d8dee9; --tx3:#a0a8b8;
+  --ac:#88c0d0; --ac2:#8fbcbb; --ac-bg:rgba(136,192,208,.15); --ac-bd:rgba(136,192,208,.35);
+  --sec:#a3be8c; --warn:#ebcb8b; --err:#bf616a;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+}
+[data-theme="custom"] {
+  --bg: var(--custom-bg, #0e0e14);
+  --bg2: var(--custom-bg2, #14141c);
+  --bg3: var(--custom-bg3, #1c1c28);
+  --bg4: var(--custom-bg4, #242435);
+  --bd: var(--custom-bd, #2a2a40);
+  --tx: var(--custom-tx, #f0f0ff);
+  --tx2: var(--custom-tx2, #b0b0cc);
+  --tx3: var(--custom-tx3, #6868a0);
+  --ac: var(--custom-ac, #7c6af7);
+  --ac2: var(--custom-ac2, #a78bfa);
+  --ac-bg: var(--custom-ac-bg, rgba(124,106,247,.12));
+  --ac-bd: var(--custom-ac-bd, rgba(124,106,247,.3));
+  --sec:#4ade80; --warn:#fb923c; --err:#f87171;
+  --shadow: 0 4px 24px rgba(0,0,0,.5);
+}
+
+html, body {
+  height:100%; overflow:hidden;
+  font-family:var(--font); font-size:13.5px; line-height:1.55;
+  color:var(--tx); background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+button {
+  font-family:var(--font); background:none; border:none; cursor:pointer;
+  color:var(--tx2); transition:color .15s,background .15s,opacity .15s;
+  overflow:visible;
+}
+button:hover { color:var(--tx); }
+input { font-family:var(--font); background:none; border:none; outline:none; color:var(--tx); }
+input::placeholder { color:var(--tx3); }
+
+/* ── Title bar ──────────────────────────────────────────────────────────────── */
+#titlebar {
+  height:var(--titlebar-h); background:var(--bg2); border-bottom:1px solid var(--bd);
+  display:flex; align-items:center; padding:0 6px 0 10px; gap:6px;
+  -webkit-app-region:drag; user-select:none; position:relative; z-index:300;
+}
+#titlebar > * { -webkit-app-region:no-drag; }
+#titlebar-drag-region { flex:1; height:100%; -webkit-app-region:drag; }
+#titlebar-logo {
+  display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700;
+  color:var(--tx); letter-spacing:.02em; flex-shrink:0; padding-right:4px;
+}
+#tab-bar-wrapper { flex:0 1 auto; overflow:hidden; max-width:calc(100% - 200px); }
+#tab-bar { display:flex; gap:2px; height:100%; align-items:flex-end; }
+
+.tab {
+  display:flex; align-items:center; gap:5px; padding:5px 8px 5px 9px;
+  border-radius:7px 7px 0 0; background:var(--bg3);
+  border:1px solid var(--bd); border-bottom:none;
+  min-width:110px; max-width:190px; flex:1; cursor:pointer;
+  transition:background .15s,border-color .15s; position:relative;
+  color:var(--tx2); font-size:12px;
+}
+.tab:hover { background:var(--bg4); color:var(--tx); }
+.tab.active { background:var(--bg); border-color:var(--bd); color:var(--tx); z-index:2; }
+.tab.dragging { opacity:.5; }
+.tab.drag-over { border-color:var(--ac); }
+.tab-fav { flex-shrink:0; width:14px; height:14px; font-size:10px; display:flex; align-items:center; justify-content:center; color:var(--tx3); }
+.tab-fav img { width:13px; height:13px; border-radius:2px; }
+.tab-title { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; font-weight:500; }
+.tab-cat { font-size:9px; font-weight:600; background:var(--ac-bg); color:var(--ac); border:1px solid var(--ac-bd); border-radius:10px; padding:0 5px; flex-shrink:0; }
+.tab-close {
+  width:16px; height:16px; border-radius:4px; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--tx3); flex-shrink:0; opacity:0;
+  transition:opacity .12s,background .12s,color .12s;
+}
+.tab:hover .tab-close, .tab.active .tab-close { opacity:1; }
+.tab-close:hover { background:rgba(248,113,113,.18); color:#f87171; }
+#new-tab-btn {
+  width:26px; height:26px; border-radius:6px; padding:0;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--tx3);
+}
+.tab.private-tab { border-top-color: #7c3aed; }
+.tab.private-tab.active { border-top-color: #a78bfa; }
+.tab.incognito-tab { border-top-color: #475569; }
+.tab.incognito-tab.active { border-top-color: #94a3b8; }
+#new-private-tab-btn:hover { opacity: 0.75; }
+#new-incognito-tab-btn:hover { opacity: 0.75; }
+
+#titlebar-controls { display:flex; gap:2px; margin-left:4px; }
+#titlebar-controls button {
+  width:28px; height:26px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--tx3);
+}
+#titlebar-controls button:hover { background:var(--bg4); color:var(--tx); }
+#btn-close:hover { background:rgba(248,113,113,.2)!important; color:#f87171!important; }
+
+/* ── Navbar ──────────────────────────────────────────────────────────────────── */
+#navbar {
+  height:var(--navbar-h); background:var(--bg2); border-bottom:1px solid var(--bd);
+  display:flex; align-items:center; padding:0 8px; gap:5px;
+  position:relative; z-index:290;
+}
+#nav-left  { display:flex; gap:2px; flex-shrink:0; }
+#nav-right { display:flex; align-items:center; gap:2px; flex-shrink:0; }
+
+.nav-btn {
+  min-width:30px; height:30px; border-radius:6px; padding:0 5px;
+  display:flex; align-items:center; justify-content:center; gap:4px;
+  font-size:12px; font-weight:500; color:var(--tx2); flex-shrink:0;
+  overflow:visible;
+}
+.nav-btn:hover:not(:disabled) { background:var(--bg4); color:var(--tx); }
+.nav-btn:disabled { opacity:.3; cursor:not-allowed; }
+.nav-btn.active { color:var(--ac); background:var(--ac-bg); }
+.icon-btn span { font-size:11.5px; font-weight:600; }
+
+/* ── URL bar ─────────────────────────────────────────────────────────────────── */
+#url-bar-wrapper {
+  flex:1; display:flex; align-items:center; gap:6px;
+  background:var(--bg3); border:1.5px solid var(--bd);
+  border-radius:10px; padding:0 10px; height:33px; min-width:0;
+  transition:border-color .15s,box-shadow .15s;
+}
+#url-bar-wrapper:focus-within { border-color:var(--ac); box-shadow:0 0 0 3px var(--ac-bg); }
+#security-icon { flex-shrink:0; width:14px; height:14px; display:flex; align-items:center; }
+#security-icon.secure   { color:var(--sec); }
+#security-icon.insecure { color:var(--warn); }
+#security-icon.neutral  { color:var(--tx3); }
+#url-bar { flex:1; font-size:13px; font-weight:500; color:var(--tx); min-width:0; }
+#btn-bookmark-page {
+  flex-shrink:0; width:22px; height:22px; border-radius:5px; padding:0;
+  display:flex; align-items:center; justify-content:center;
+}
+#btn-bookmark-page:hover { background:var(--bg4); }
+
+/* ── More menu ────────────────────────────────────────────────────────────────── */
+#more-menu-wrap { position:relative; }
+.more-menu {
+  position:absolute; top:calc(100% + 6px); right:0;
+  width:230px; background:var(--bg2);
+  border:1px solid var(--bd); border-radius:10px;
+  padding:5px; box-shadow:var(--shadow);
+  z-index:500;
+  animation:more-menu-in .13s ease;
+}
+@keyframes more-menu-in {
+  from { opacity:0; transform:translateY(-6px) scale(.97); }
+  to   { opacity:1; transform:none; }
+}
+.more-menu.hidden { display:none; }
+.more-menu-item {
+  display:flex; align-items:center; gap:9px;
+  width:100%; padding:8px 10px; border-radius:7px;
+  font-size:12.5px; font-weight:500; color:var(--tx2);
+  background:none; border:none; cursor:pointer; text-align:left;
+  font-family:var(--font); transition:background .12s,color .12s;
+}
+.more-menu-item:hover { background:var(--bg3); color:var(--tx); }
+.more-menu-shortcut { margin-left:auto; font-size:10.5px; color:var(--tx3); font-weight:400; }
+.more-menu-label { font-size:12.5px; font-weight:500; color:var(--tx2); }
+.more-menu-divider { height:1px; background:var(--bd); margin:4px 0; }
+.more-zoom-row { cursor:default!important; }
+.more-zoom-row:hover { background:none!important; color:var(--tx2)!important; }
+.more-zoom-controls { margin-left:auto; display:flex; align-items:center; gap:2px; }
+#zoom-level { font-size:11px; font-weight:600; color:var(--tx2); min-width:36px; text-align:center; }
+.zoom-btn {
+  width:22px; height:22px; border-radius:5px; padding:0;
+  font-size:14px; font-weight:600; color:var(--tx3);
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; cursor:pointer; font-family:var(--font);
+  transition:background .12s,color .12s;
+}
+.zoom-btn:hover { background:var(--bg4); color:var(--tx); }
+
+/* ── Find bar ────────────────────────────────────────────────────────────────── */
+#find-bar {
+  position:fixed; top:calc(var(--titlebar-h) + var(--navbar-h)); right:16px; z-index:350;
+  display:flex; align-items:center; gap:6px;
+  background:var(--bg2); border:1.5px solid var(--ac);
+  border-top:none; border-radius:0 0 10px 10px;
+  padding:6px 10px; box-shadow:var(--shadow);
+  transition:transform .18s,opacity .15s;
+}
+#find-bar.find-hidden { transform:translateY(-110%); opacity:0; pointer-events:none; }
+#find-input {
+  width:200px; font-size:13px; background:var(--bg3); border:1px solid var(--bd);
+  border-radius:6px; padding:4px 8px; color:var(--tx); transition:border-color .15s;
+}
+#find-count { font-size:11px; color:var(--tx3); min-width:50px; }
+#find-bar button {
+  width:24px; height:24px; border-radius:5px; padding:0;
+  font-size:13px; font-weight:600; color:var(--tx2);
+  display:flex; align-items:center; justify-content:center;
+}
+#find-bar button:hover { background:var(--bg4); color:var(--tx); }
+#find-close:hover { color:var(--err)!important; }
+
+/* ── Browser body ────────────────────────────────────────────────────────────── */
+#browser-body {
+  display:flex;
+  height:calc(100vh - var(--titlebar-h) - var(--navbar-h) - var(--statusbar-h));
+  overflow:hidden; position:relative;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────────── */
+#sidebar {
+  width:var(--sidebar-w); flex-shrink:0;
+  background:var(--bg2); border-right:1px solid var(--bd);
+  overflow:hidden; transition:width .22s cubic-bezier(.4,0,.2,1),opacity .18s;
+}
+#sidebar.sidebar-hidden { width:0; opacity:0; }
+#sidebar-inner { width:var(--sidebar-w); height:100%; overflow-y:auto; padding:8px 0; }
+#sidebar-inner::-webkit-scrollbar { width:3px; }
+#sidebar-inner::-webkit-scrollbar-thumb { background:var(--bd); border-radius:3px; }
+.sidebar-section { padding:0 6px 8px; }
+.sidebar-section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:4px 6px 5px; font-size:10px; font-weight:700;
+  letter-spacing:.08em; color:var(--tx3); text-transform:uppercase;
+}
+.sidebar-section-header button {
+  width:18px; height:18px; border-radius:4px;
+  display:flex; align-items:center; justify-content:center; color:var(--tx3);
+}
+.sidebar-section-header button:hover { background:var(--bg4); color:var(--tx); }
+.sidebar-divider { height:1px; background:var(--bd); margin:4px 10px; }
+.sb-site-item {
+  display:flex; align-items:center; gap:7px; padding:6px 8px; border-radius:6px;
+  cursor:pointer; color:var(--tx2); font-size:12.5px; font-weight:500;
+  transition:background .12s,color .12s;
+}
+.sb-site-item:hover { background:var(--bg3); color:var(--tx); }
+.sb-site-icon {
+  width:22px; height:22px; border-radius:6px; background:var(--bg4);
+  display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0;
+}
+.sb-site-label { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sb-site-del { opacity:0; font-size:10px; width:16px; height:16px; border-radius:3px; display:flex; align-items:center; justify-content:center; }
+.sb-site-item:hover .sb-site-del { opacity:1; }
+.sb-site-del:hover { color:var(--err); }
+.sb-cat-header { display:flex; align-items:center; justify-content:space-between; padding:5px 8px; cursor:pointer; border-radius:6px; transition:background .12s; }
+.sb-cat-header:hover { background:var(--bg3); }
+.sb-cat-left { display:flex; align-items:center; gap:5px; }
+.sb-cat-icon { font-size:11px; }
+.sb-cat-name { font-size:11.5px; font-weight:600; color:var(--tx2); }
+.sb-cat-right { display:flex; align-items:center; gap:4px; }
+.sb-cat-count { font-size:10px; font-weight:600; color:var(--tx3); background:var(--bg4); border-radius:10px; padding:0 5px; }
+.sb-cat-chevron { font-size:13px; color:var(--tx3); }
+.sb-tab-item {
+  display:flex; align-items:center; gap:6px; padding:4px 8px 4px 20px;
+  border-radius:6px; cursor:pointer; color:var(--tx3); font-size:12px;
+  transition:background .1s,color .1s;
+}
+.sb-tab-item:hover { background:var(--bg3); color:var(--tx); }
+.sb-tab-item.active { background:var(--ac-bg); color:var(--ac); }
+.sb-tab-fav { font-size:10px; flex-shrink:0; }
+.sb-tab-fav img { width:12px; height:12px; }
+.sb-tab-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+
+/* ── Webview ─────────────────────────────────────────────────────────────────── */
+#webview-container { flex:1; position:relative; overflow:hidden; background:var(--bg); }
+webview { position:absolute; top:0; left:0; right:0; bottom:0; display:none; width:100%; height:100%; }
+webview.active { display:flex; }
+
+/* ── New tab page ────────────────────────────────────────────────────────────── */
+#newtab-page {
+  position:absolute; inset:0;
+  display:none; flex-direction:column; align-items:center;
+  overflow-y:auto; padding:40px 20px 60px; background:var(--bg);
+}
+#newtab-page.newtab-visible { display:flex; }
+
+/* ── Private / Tor new tab pages ─────────────────────────────────────────── */
+#incognito-page, #tor-page {
+  display: none;
+  position: absolute; inset: 0;
+  align-items: center; justify-content: center;
+  background: #111118;
+  z-index: 10;
+}
+#incognito-page.private-visible, #tor-page.private-visible { display:flex; }
+.private-inner { display:flex; flex-direction:column; align-items:center; gap:20px; max-width:600px; width:100%; padding:40px 24px; }
+.private-icon { color: #94a3b8; }
+.private-title { font-size:26px; font-weight:700; color:#e2e8f0; margin:0; text-align:center; }
+.private-subtitle { font-size:13.5px; color:#94a3b8; text-align:center; max-width:480px; margin:0; line-height:1.6; }
+.private-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; }
+.private-card { background:#1a1a24; border:1px solid #2a2a3a; border-radius:10px; padding:16px 18px; }
+.private-card-does { border-color:#1e3a2a; }
+.private-card-doesnt { border-color:#3a1e1e; }
+.private-card-title { display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:#e2e8f0; margin-bottom:10px; }
+.private-card ul { margin:0; padding-left:16px; display:flex; flex-direction:column; gap:5px; }
+.private-card ul li { font-size:12.5px; color:#94a3b8; }
+#newtab-inner { width:100%; max-width:580px; display:flex; flex-direction:column; align-items:center; gap:24px; }
+#newtab-header { display:flex; flex-direction:column; align-items:center; gap:10px; }
+#newtab-header h1 { font-size:28px; font-weight:700; letter-spacing:-0.02em; color:var(--tx); margin:0; }
+.newtab-tagline { font-size:13px; color:var(--tx3); font-weight:500; letter-spacing:.05em; }
+#newtab-searchbar { width:100%; }
+#newtab-search-wrap {
+  display:flex; align-items:center; gap:10px;
+  background:var(--bg2); border:1.5px solid var(--bd);
+  border-radius:14px; padding:11px 16px;
+  transition:border-color .15s,box-shadow .15s;
+}
+#newtab-search-wrap:focus-within { border-color:var(--ac); box-shadow:0 0 0 4px var(--ac-bg); }
+#newtab-search-input { flex:1; font-size:15px; font-weight:500; color:var(--tx); }
+#shortcuts-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(80px,1fr)); gap:12px; width:100%; }
+.shortcut {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:14px 8px 10px; border-radius:12px; background:var(--bg2); border:1px solid var(--bd);
+  cursor:pointer; position:relative; transition:background .15s,border-color .15s,transform .12s;
+}
+.shortcut:hover { background:var(--bg3); border-color:var(--ac-bd); transform:translateY(-1px); }
+.sc-icon { width:40px; height:40px; border-radius:10px; background:var(--bg4); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:var(--tx); }
+.sc-label { font-size:11.5px; font-weight:500; color:var(--tx2); text-align:center; }
+.sc-del { position:absolute; top:4px; right:4px; width:16px; height:16px; border-radius:4px; font-size:9px; opacity:0; display:flex; align-items:center; justify-content:center; }
+.shortcut:hover .sc-del { opacity:1; }
+.sc-del:hover { background:var(--bg4); color:var(--err); }
+#add-shortcut-btn {
+  display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px;
+  background:var(--bg2); border:1px dashed var(--bd);
+  font-size:12.5px; font-weight:500; color:var(--tx3); cursor:pointer;
+  transition:border-color .15s,color .15s;
+}
+#add-shortcut-btn:hover { border-color:var(--ac); color:var(--ac); }
+
+/* ── AI panel ─────────────────────────────────────────────────────────────────── */
+#ai-panel {
+  position:fixed; right:0; width:330px;
+  top:calc(var(--titlebar-h) + var(--navbar-h));
+  height:calc(100vh - var(--titlebar-h) - var(--navbar-h) - var(--statusbar-h));
+  background:var(--bg2); border-left:1px solid var(--bd);
+  display:flex; flex-direction:column; z-index:200;
+  transition:transform .25s cubic-bezier(.4,0,.2,1),opacity .2s;
+}
+#ai-panel.panel-hidden { transform:translateX(100%); opacity:0; pointer-events:none; }
+#ai-local-badge {
+  font-size:9px; font-weight:700; padding:1px 6px; border-radius:10px;
+  background:var(--ac-bg); color:var(--ac); border:1px solid var(--ac-bd);
+  letter-spacing:.08em; margin-left:5px;
+}
+#ai-quick-row {
+  display:flex; gap:5px; padding:7px 10px; border-bottom:1px solid var(--bd);
+  background:var(--bg2); flex-shrink:0; overflow-x:auto; scrollbar-width:none;
+}
+#ai-quick-row::-webkit-scrollbar { display:none; }
+.ai-pill {
+  padding:4px 11px; border-radius:20px; border:1px solid var(--bd); background:var(--bg3);
+  color:var(--tx2); font-size:11.5px; font-weight:500; cursor:pointer; white-space:nowrap;
+  transition:border-color .15s,color .15s,background .15s; font-family:var(--font);
+}
+.ai-pill:hover { border-color:var(--ac); color:var(--ac); background:var(--ac-bg); }
+#ai-ctx-bar {
+  display:none; align-items:center; gap:6px; padding:5px 10px;
+  background:var(--ac-bg); border-bottom:1px solid var(--ac-bd);
+  font-size:11.5px; color:var(--ac); flex-shrink:0;
+}
+#ai-ctx-bar.visible { display:flex; }
+#ai-ctx-label { flex:1; font-weight:500; }
+#ai-ctx-clear { background:none; border:none; color:var(--tx3); cursor:pointer; font-size:12px; padding:1px 3px; border-radius:3px; }
+#ai-ctx-clear:hover { color:var(--err); }
+#ai-messages {
+  flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column;
+  gap:10px; scroll-behavior:smooth;
+}
+#ai-messages::-webkit-scrollbar { width:3px; }
+#ai-messages::-webkit-scrollbar-thumb { background:var(--bd); border-radius:3px; }
+#ai-welcome { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:32px 16px; text-align:center; }
+#ai-welcome-orb {
+  width:52px; height:52px; border-radius:14px;
+  background:linear-gradient(135deg,var(--ac),var(--ac2));
+  display:flex; align-items:center; justify-content:center; font-size:24px;
+  box-shadow:0 0 28px var(--ac-bg); animation:neuro-pulse 3s ease-in-out infinite;
+}
+@keyframes neuro-pulse { 0%,100%{box-shadow:0 0 24px var(--ac-bg)} 50%{box-shadow:0 0 40px var(--ac-bd)} }
+#ai-welcome-title { font-size:16px; font-weight:700; color:var(--tx); }
+#ai-welcome-sub { font-size:12.5px; color:var(--tx3); line-height:1.6; max-width:240px; }
+.ai-msg-row { display:flex; gap:7px; max-width:100%; animation:ai-msg-in .18s ease-out; }
+@keyframes ai-msg-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+.ai-msg-row.user { flex-direction:row-reverse; }
+.ai-msg-avatar { width:24px; height:24px; border-radius:7px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; margin-top:2px; color:#fff; }
+.ai-msg-row.user .ai-msg-avatar { background:linear-gradient(135deg,#3b82f6,#6366f1); }
+.ai-msg-row.ai   .ai-msg-avatar { background:linear-gradient(135deg,var(--ac),var(--ac2)); box-shadow:0 0 10px var(--ac-bg); }
+.ai-msg-bubble { max-width:calc(100% - 38px); padding:9px 12px; border-radius:12px; font-size:13px; line-height:1.65; word-break:break-word; }
+.ai-msg-row.user .ai-msg-bubble { background:var(--ac-bg); border:1px solid var(--ac-bd); border-top-right-radius:3px; color:var(--tx); }
+.ai-msg-row.ai   .ai-msg-bubble { background:var(--bg3); border:1px solid var(--bd); border-top-left-radius:3px; color:var(--tx); }
+.ai-msg-bubble.error { border-color:rgba(248,113,113,.3)!important; background:rgba(248,113,113,.06)!important; color:var(--err)!important; }
+.ai-cursor { display:inline-block; font-size:11px; opacity:.7; animation:ai-cursor-blink .7s step-end infinite; color:var(--ac); margin-left:1px; }
+@keyframes ai-cursor-blink { 0%,100%{opacity:.7} 50%{opacity:0} }
+.ai-typing { display:flex; align-items:center; gap:3px; padding:4px 2px; }
+.ai-typing-dot { width:5px; height:5px; border-radius:50%; background:var(--ac); opacity:.5; animation:ai-dot 1.2s ease-in-out infinite; }
+.ai-typing-dot:nth-child(2){animation-delay:.2s}
+.ai-typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes ai-dot { 0%,80%,100%{transform:translateY(0);opacity:.4} 40%{transform:translateY(-4px);opacity:1} }
+#ai-input-area { padding:8px 10px 10px; background:var(--bg2); border-top:1px solid var(--bd); flex-shrink:0; }
+#ai-input-wrap {
+  display:flex; align-items:flex-end; gap:6px; background:var(--bg3);
+  border:1.5px solid var(--bd); border-radius:10px; padding:7px 7px 7px 11px;
+  transition:border-color .15s;
+}
+#ai-input-wrap:focus-within { border-color:var(--ac); }
+#ai-chat-input {
+  flex:1; background:none; border:none; outline:none; color:var(--tx);
+  font-family:var(--font); font-size:13px; line-height:1.5; resize:none;
+  max-height:100px; min-height:18px; scrollbar-width:none;
+}
+#ai-chat-input::-webkit-scrollbar { display:none; }
+#ai-chat-input::placeholder { color:var(--tx3); }
+#ai-send-btn {
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(135deg,var(--ac),var(--ac2)); color:#fff;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  box-shadow:0 2px 8px var(--ac-bg); transition:opacity .15s,transform .1s;
+}
+#ai-send-btn:hover  { opacity:.88; }
+#ai-send-btn:active { transform:scale(.92); }
+#ai-send-btn:disabled { opacity:.3; cursor:not-allowed; transform:none; }
+#ai-status-bar { display:flex; align-items:center; gap:5px; padding:4px 2px 0; font-size:11px; color:var(--tx3); }
+#ai-status-dot { width:6px; height:6px; border-radius:50%; background:var(--sec); animation:ai-status-pulse 2.5s ease-in-out infinite; flex-shrink:0; }
+#ai-status-dot.thinking { background:var(--warn); animation:ai-status-pulse .8s ease-in-out infinite; }
+@keyframes ai-status-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+#ai-clear-chat { background:none; border:none; color:var(--tx3); cursor:pointer; padding:3px 6px; border-radius:5px; transition:color .15s,background .15s; display:flex; align-items:center; }
+#ai-clear-chat:hover { color:var(--tx); background:var(--bg3); }
+
+/* ── Side panels ─────────────────────────────────────────────────────────────── */
+.side-panel {
+  position:fixed; right:0;
+  top:calc(var(--titlebar-h) + var(--navbar-h));
+  height:calc(100vh - var(--titlebar-h) - var(--navbar-h) - var(--statusbar-h));
+  width:320px; background:var(--bg2); border-left:1px solid var(--bd);
+  display:flex; flex-direction:column; z-index:400;
+  transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .18s;
+}
+.side-panel.panel-hidden { transform:translateX(110%); opacity:0; pointer-events:none; }
+.wide-panel { width:400px; }
+.panel-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px 11px; border-bottom:1px solid var(--bd); flex-shrink:0;
+}
+.panel-title { display:flex; align-items:center; gap:7px; font-size:13.5px; font-weight:700; color:var(--tx); }
+.panel-close-btn { width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--tx3); }
+.panel-close-btn:hover { background:var(--bg4); color:var(--tx); }
+.scroll-area { flex:1; overflow-y:auto; padding:8px 10px; }
+.scroll-area::-webkit-scrollbar { width:3px; }
+.scroll-area::-webkit-scrollbar-thumb { background:var(--bd); border-radius:3px; }
+.panel-footer { padding:10px 14px; border-top:1px solid var(--bd); flex-shrink:0; }
+.list-item { display:flex; align-items:center; gap:8px; padding:8px; border-radius:8px; cursor:pointer; transition:background .12s; margin-bottom:2px; }
+.list-item:hover { background:var(--bg3); }
+.list-item-info { flex:1; min-width:0; cursor:pointer; }
+.list-item-title { font-size:13px; font-weight:600; color:var(--tx); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.list-item-url   { font-size:11.5px; color:var(--tx3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
+.list-item-time  { font-size:11px; color:var(--tx3); flex-shrink:0; }
+.list-del { width:22px; height:22px; border-radius:5px; font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; opacity:0; }
+.list-item:hover .list-del { opacity:1; }
+.list-del:hover { background:rgba(248,113,113,.15); color:var(--err); }
+.date-sep { font-size:10.5px; font-weight:700; color:var(--tx3); text-transform:uppercase; letter-spacing:.08em; padding:8px 2px 4px; margin-top:4px; }
+.empty-state { text-align:center; padding:32px 16px; color:var(--tx3); font-size:13px; line-height:1.6; }
+#history-search-wrap { padding:8px 10px; border-bottom:1px solid var(--bd); flex-shrink:0; }
+#history-search { width:100%; background:var(--bg3); border:1px solid var(--bd); border-radius:7px; padding:6px 10px; font-size:13px; color:var(--tx); transition:border-color .15s; }
+#history-search:focus { border-color:var(--ac); }
+#cookies-filter-wrap { display:flex; gap:6px; padding:8px 10px; border-bottom:1px solid var(--bd); flex-shrink:0; }
+#cookies-filter { flex:1; background:var(--bg3); border:1px solid var(--bd); border-radius:7px; padding:5px 10px; font-size:13px; color:var(--tx); }
+#refresh-cookies-btn { padding:5px 10px; border-radius:7px; background:var(--bg4); font-size:12px; font-weight:500; color:var(--tx2); }
+#refresh-cookies-btn:hover { color:var(--tx); }
+
+/* ── Settings ────────────────────────────────────────────────────────────────── */
+#settings-body { padding:8px 14px; }
+.sg { margin-bottom:20px; }
+.sg-title { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--tx3); margin-bottom:8px; padding-left:2px; }
+.si { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--bd); }
+.si:last-child { border-bottom:none; }
+.si-info { flex:1; }
+.si-label { font-size:13.5px; font-weight:600; color:var(--tx); margin-bottom:2px; }
+.si-desc  { font-size:11.5px; color:var(--tx3); line-height:1.4; }
+.theme-grid { display:grid; grid-template-columns:1fr 1fr; gap:5px; flex-shrink:0; }
+.theme-opt {
+  padding:6px 10px; border-radius:8px; font-size:12px; font-weight:600;
+  border:1.5px solid var(--bd); background:var(--bg3); color:var(--tx2); cursor:pointer;
+  transition:all .15s; text-align:center; font-family:var(--font);
+}
+.theme-opt:hover { border-color:var(--ac); color:var(--ac); background:var(--ac-bg); }
+.theme-opt.active { border-color:var(--ac); color:var(--ac); background:var(--ac-bg); font-weight:700; }
+.switch { position:relative; display:inline-block; width:40px; height:22px; flex-shrink:0; }
+.switch input { opacity:0; width:0; height:0; }
+.slider { position:absolute; inset:0; background:var(--bg4); border-radius:22px; cursor:pointer; transition:background .2s; border:1px solid var(--bd); }
+.slider::before { content:''; position:absolute; width:16px; height:16px; left:2px; top:2px; background:var(--tx3); border-radius:50%; transition:transform .2s,background .2s; }
+input:checked+.slider { background:var(--ac); border-color:var(--ac); }
+input:checked+.slider::before { transform:translateX(18px); background:#fff; }
+.about-card { background:var(--bg3); border:1px solid var(--bd); border-radius:10px; padding:14px; margin-top:4px; }
+.about-name { font-size:14px; font-weight:700; color:var(--tx); margin-bottom:3px; }
+.about-ver  { font-size:12px; color:var(--tx3); margin-bottom:4px; }
+.about-desc { font-size:12px; color:var(--ac); font-weight:500; }
+.danger-btn { background:rgba(248,113,113,.1); color:var(--err); border:1px solid rgba(248,113,113,.2); border-radius:7px; padding:7px 14px; font-size:12.5px; font-weight:600; cursor:pointer; width:100%; transition:background .15s; }
+.danger-btn:hover { background:rgba(248,113,113,.2); }
+.action-btn { background:var(--bg4); color:var(--tx2); border:1px solid var(--bd); border-radius:7px; padding:6px 12px; font-size:12px; font-weight:600; cursor:pointer; flex-shrink:0; transition:background .15s,color .15s; }
+.action-btn:hover { background:var(--bg3); color:var(--tx); }
+.accent-btn { background:var(--ac-bg); color:var(--ac); border-color:var(--ac-bd); }
+.accent-btn:hover { background:var(--ac); color:#fff; }
+
+/* ══ CUSTOM COLOR PICKER ═══════════════════════════════════════════════════════ */
+.si-custom-colors {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 12px 0;
+  display: none;
+}
+.si-custom-colors.visible { display: flex; }
+
+.custom-color-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.color-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: var(--bg3);
+  border: 1px solid var(--bd);
+  transition: border-color .15s;
+}
+.color-picker-item:hover { border-color: var(--ac-bd); }
+
+.cpi-preview {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,.12);
+  transition: transform .15s;
+}
+.color-picker-item:hover .cpi-preview { transform: scale(1.08); }
+
+.cpi-info { flex: 1; }
+.cpi-label { font-size: 12.5px; font-weight: 600; color: var(--tx); }
+.cpi-desc  { font-size: 11px; color: var(--tx3); margin-top: 1px; }
+
+.cpi-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.color-input {
+  width: 32px;
+  height: 32px;
+  padding: 2px;
+  border-radius: 7px;
+  border: 1.5px solid var(--bd);
+  background: var(--bg4);
+  cursor: pointer;
+  transition: border-color .15s, transform .12s;
+  -webkit-appearance: none;
+  appearance: none;
+  overflow: hidden;
+}
+.color-input:hover { border-color: var(--ac); transform: scale(1.05); }
+.color-input::-webkit-color-swatch-wrapper { padding: 0; }
+.color-input::-webkit-color-swatch { border: none; border-radius: 4px; }
+
+.cpi-hex {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--tx3);
+  font-family: 'SF Mono', 'Fira Mono', monospace;
+  min-width: 52px;
+  text-align: right;
+  transition: color .15s;
+}
+
+/* Live preview bar */
+.custom-preview-bar {
+  display: flex;
+  height: 36px;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid var(--bd);
+  margin-bottom: 14px;
+  gap: 0;
+}
+.cpb-swatch {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  transition: all .25s;
+}
+.cpb-label { opacity: .6; }
+
+/* Color action buttons */
+.custom-color-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ── Modals ──────────────────────────────────────────────────────────────────── */
+.modal { position:fixed; z-index:600; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--bg2); border:1px solid var(--bd); border-radius:14px; width:340px; box-shadow:var(--shadow); }
+.modal.hidden { display:none; }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px 12px; border-bottom:1px solid var(--bd); font-size:14px; font-weight:700; color:var(--tx); }
+.modal-close { width:24px; height:24px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--tx3); }
+.modal-close:hover { background:var(--bg4); color:var(--tx); }
+.modal-body { padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+.modal-body label { display:flex; flex-direction:column; gap:4px; font-size:12.5px; font-weight:600; color:var(--tx2); }
+.modal-body input { background:var(--bg3); border:1.5px solid var(--bd); border-radius:7px; padding:7px 10px; font-size:13px; color:var(--tx); transition:border-color .15s; }
+.modal-body input:focus { border-color:var(--ac); }
+.modal-footer { display:flex; justify-content:flex-end; gap:8px; padding:10px 16px 14px; }
+.modal-cancel { padding:7px 14px; border-radius:7px; font-size:13px; font-weight:600; background:var(--bg4); color:var(--tx2); border:1px solid var(--bd); }
+.modal-cancel:hover { color:var(--tx); }
+.modal-ok { padding:7px 16px; border-radius:7px; font-size:13px; font-weight:700; background:linear-gradient(135deg,var(--ac),var(--ac2)); color:#fff; border:none; box-shadow:0 2px 8px var(--ac-bg); transition:opacity .15s; }
+.modal-ok:hover { opacity:.88; }
+#overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:350; backdrop-filter:blur(2px); }
+#overlay.hidden { display:none; }
+
+/* ── Phishing ────────────────────────────────────────────────────────────────── */
+.phishing-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:700; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+.phishing-overlay.hidden { display:none; }
+#phishing-card { background:var(--bg2); border:1px solid var(--bd); border-radius:18px; padding:28px 24px; max-width:420px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,.6); display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+#phish-badge { font-size:10px; font-weight:800; letter-spacing:.1em; color:var(--err); background:rgba(248,113,113,.1); border:1px solid rgba(248,113,113,.2); border-radius:20px; padding:3px 12px; }
+#phish-title { font-size:16px; font-weight:700; color:var(--tx); line-height:1.4; }
+#phish-url-line { font-size:12px; color:var(--tx3); word-break:break-all; }
+#phish-reasons-box { background:var(--bg3); border:1px solid var(--bd); border-radius:10px; padding:10px 14px; text-align:left; width:100%; }
+.phish-reasons-label { font-size:11.5px; font-weight:700; color:var(--tx3); margin-bottom:6px; }
+#phish-reasons-list { list-style:none; }
+#phish-reasons-list li { font-size:12.5px; color:var(--tx2); padding:2px 0; }
+#phish-reasons-list li::before { content:'⚠ '; color:var(--warn); }
+#phish-score-row { display:flex; align-items:center; gap:10px; width:100%; font-size:12px; color:var(--tx3); }
+#phish-score-bar-wrap { flex:1; height:6px; background:var(--bg4); border-radius:3px; overflow:hidden; }
+#phish-score-bar { height:100%; background:linear-gradient(90deg,#fbbf24,#ef4444); border-radius:3px; transition:width .3s; }
+#phish-score-num { font-weight:700; color:var(--err); min-width:32px; }
+#phish-advice { font-size:12.5px; color:var(--tx2); line-height:1.55; }
+#phish-buttons { display:flex; gap:10px; width:100%; }
+#phish-exit-btn { flex:1; padding:10px; border-radius:9px; font-size:13.5px; font-weight:700; background:linear-gradient(135deg,var(--ac),var(--ac2)); color:#fff; border:none; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; transition:opacity .15s; }
+#phish-exit-btn:hover { opacity:.88; }
+#phish-continue-btn { flex:1; padding:10px; border-radius:9px; font-size:12.5px; font-weight:600; background:var(--bg4); color:var(--tx3); border:1px solid var(--bd); display:flex; align-items:center; justify-content:center; gap:5px; cursor:pointer; transition:color .15s; }
+#phish-continue-btn:hover { color:var(--tx); }
+#phish-footer-note { font-size:11px; color:var(--tx3); }
+#phish-icon-wrap { width:72px; height:72px; border-radius:50%; background:rgba(224,79,79,.08); display:flex; align-items:center; justify-content:center; border:1px solid rgba(224,79,79,.2); }
+
+/* ── Status bar ──────────────────────────────────────────────────────────────── */
+#statusbar { height:var(--statusbar-h); background:var(--bg2); border-top:1px solid var(--bd); display:flex; align-items:center; padding:0 12px; gap:8px; position:relative; z-index:280; }
+#status-text { font-size:11.5px; color:var(--tx3); }
+#load-indicator.hidden { display:none; }
+.dot-wave { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ac); animation:dot-wave .8s ease-in-out infinite; }
+@keyframes dot-wave { 0%,100%{opacity:.3;transform:scale(.7)} 50%{opacity:1;transform:scale(1)} }
+.spinner { width:12px; height:12px; border:2px solid var(--bd); border-top-color:var(--ac); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+</style>
+
+<script src="renderer.js"></script>
+</body>
+</html>
